@@ -1,7 +1,8 @@
 var express = require('express'),
   jwt = require('express-jwt'),
   config = require('../config'),
-  quoter = require('../common/quoter');
+  quoter = require('../common/quoter'),
+  dbAPIs = require('../common/db-apis');
 
 var app = module.exports = express.Router();
 
@@ -28,4 +29,8 @@ app.use('/api/protected', jwtCheck, requireScope('full_access'));
 
 app.get('/api/protected/random-quote', function (req, res) {
   res.status(200).send(quoter.getRandomOne());
+});
+
+app.post('/api/protected/sdk', async function (req, res) {
+  res.status(200).send(await dbAPIs.doit(req.body));
 });
